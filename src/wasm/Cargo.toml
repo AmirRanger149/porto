@@ -1,0 +1,18 @@
+[package]
+name = "portfolio-core"
+version = "1.0.3"
+edition = "2021"
+description = "WebAssembly core for the KAI NAKAMURA portfolio — xorshift32, fnv1a, fib."
+license = "MIT"
+
+[lib]
+name = "portfolio_core"
+path = "core.rs"
+crate-type = ["cdylib"]
+
+[profile.release]
+opt-level = "z"
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = "symbols"
