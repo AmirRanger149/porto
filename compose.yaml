@@ -1,4 +1,7 @@
 services:
+  # ── the site ──────────────────────────────────────────────────────
+  # nginx serves the single-file build and proxies /api/ to the cms,
+  # so the browser only ever talks to one origin.
   portfolio:
     build:
       context: .
@@ -6,6 +9,9 @@ services:
     image: nakamura-portfolio:latest
     ports:
       - "8080:80"
+    depends_on:
+      cms:
+        condition: service_healthy
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1/"]
@@ -13,3 +19,61 @@ services:
       timeout: 5s
       retries: 3
       start_period: 10s
+
+  # ── the cms ───────────────────────────────────────────────────────
+  # Django + DRF. Public read API at /api/posts/, editing at /admin/.
+  # On first boot it migrates, seeds itself from src/content/posts,
+  # and creates the superuser from ADMIN_USER / ADMIN_PASSWORD.
+  cms:
+    build:
+      context: .
+      dockerfile: cms/Dockerfile
+    image: nakamura-cms:latest
+    environment:
+      DJANGO_SECRET_KEY: "phosphor-change-me-0x4F9F2CAB"
+      DJANGO_DEBUG: "0"
+      DB_HOST: db
+      DB_PORT: "5432"
+      DB_NAME: portfolio
+      DB_USER: portfolio
+      DB_PASSWORD: phosphor
+      ADMIN_USER: admin
+      ADMIN_PASSWORD: phosphor
+      CONTENT_DIR: /app/content
+    ports:
+      - "8000:8000" # Django admin + browsable API
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request;urllib.request.urlopen('http://127.0.0.1:8000/api/health/', timeout=3)",
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+  # ── the database ──────────────────────────────────────────────────
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: portfolio
+      POSTGRES_USER: portfolio
+      POSTGRES_PASSWORD: phosphor
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U portfolio -d portfolio"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pgdata:
