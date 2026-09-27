@@ -53,7 +53,7 @@ export function Uplink() {
 
   return (
     <section id="uplink" className="relative mx-auto max-w-6xl scroll-mt-24 px-4 pb-10 pt-24 sm:px-6">
-      <SectionHeading index="05" title="UPLINK" cmd="./connect --secure --all-channels" />
+      <SectionHeading index="06" title="UPLINK" cmd="./connect --secure --all-channels" />
 
       <div className="grid gap-12 lg:grid-cols-[6fr_5fr] lg:gap-16">
         <Reveal>

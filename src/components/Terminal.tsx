@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { PROFILE, PROJECTS, SKILL_GROUPS, SYSINFO_LOGO, TERMINAL_MOTD } from "../data/profile";
 import { runRace } from "../lib/bench";
 import { peekCore } from "../lib/wasm";
+import { currentFeed } from "../lib/posts";
 import { Reveal } from "./Reveal";
 import { SectionHeading } from "./SectionHeading";
 import type { RainMode } from "./MatrixRain";
@@ -30,6 +31,8 @@ const HELP: Entry[] = [
   { text: "  bench               race JavaScript vs WebAssembly", tone: "dim" },
   { text: "  sysinfo             core + machine readout", tone: "dim" },
   { text: "  matrix <zen|on|off> control the rain daemon", tone: "dim" },
+  { text: "  logs                list decrypted entries", tone: "dim" },
+  { text: "  open <slug>         decrypt a specific log", tone: "dim" },
   { text: "  contact             uplink channels", tone: "dim" },
   { text: "  pill                choose", tone: "dim" },
   { text: "  whoami · date · uname · echo · sudo · clear", tone: "dim" },
@@ -155,6 +158,34 @@ export function Terminal() {
         ]);
         break;
       }
+      case "logs":
+      case "posts": {
+        const feed = currentFeed();
+        say([
+          { text: `source: ${feed.source === "cms" ? "django-cms (live)" : "bundled markdown"}`, tone: "dim" },
+          ...feed.posts.map((p, i) => ({
+            text: `  0x${String(feed.posts.length - i).padStart(2, "0")}  ${p.slug.padEnd(14)} ${p.date}  ·  ${p.title}`,
+            tone: "out" as Tone,
+          })),
+          { text: "type 'open <slug>' to decrypt one — e.g. open rain-entropy", tone: "dim" },
+        ]);
+        break;
+      }
+      case "open": {
+        const feed = currentFeed();
+        const slug = args[0];
+        const target = slug ? feed.posts.find((p) => p.slug === slug) : undefined;
+        if (target) {
+          window.location.hash = `#/log/${target.slug}`;
+          say([{ text: `decrypting "${target.title}" …`, tone: "ok" }]);
+        } else {
+          say([
+            { text: `log not found: ${slug ?? "(none)"}`, tone: "err" },
+            { text: `available: ${feed.posts.map((p) => p.slug).join(", ")}`, tone: "dim" },
+          ]);
+        }
+        break;
+      }
       case "contact":
       case "uplink":
         say([
@@ -216,7 +247,7 @@ export function Terminal() {
 
   return (
     <section id="tty" className="relative mx-auto max-w-6xl scroll-mt-24 px-4 py-24 sm:px-6">
-      <SectionHeading index="04" title="TERMINAL" cmd="ssh guest@nakamura.dev -t /bin/tty1" />
+      <SectionHeading index="05" title="TERMINAL" cmd="ssh guest@nakamura.dev -t /bin/tty1" />
 
       <Reveal>
         <div className="border border-line bg-panel/90 shadow-[0_0_60px_rgba(0,255,65,0.05)]">

@@ -230,6 +230,95 @@ body {
   animation: riseIn 0.3s ease both;
 }
 
+/* ---------- log article typography ---------- */
+
+.post-body h2 {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  line-height: 1;
+  color: var(--color-phos);
+  margin: 2.4rem 0 0.9rem;
+}
+.post-body h3 {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--color-ice);
+  margin: 1.9rem 0 0.6rem;
+}
+.post-body p {
+  font-size: 0.9rem;
+  line-height: 1.75;
+  color: var(--color-fog);
+  margin-bottom: 1rem;
+}
+.post-body strong {
+  color: var(--color-phos-soft);
+  font-weight: 600;
+}
+.post-body ul,
+.post-body ol {
+  margin: 0 0 1rem 1.25rem;
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: var(--color-fog);
+}
+.post-body li {
+  margin-bottom: 0.45rem;
+  padding-left: 0.25rem;
+}
+.post-body ul li::marker {
+  content: "▸  ";
+  color: var(--color-phos);
+}
+.post-body ol li::marker {
+  color: var(--color-phos);
+  font-weight: 600;
+}
+.post-body code {
+  background: var(--color-panel2);
+  border: 1px solid var(--color-line);
+  padding: 0.1em 0.35em;
+  font-size: 0.78rem;
+  color: var(--color-phos-soft);
+}
+.post-body pre {
+  background: var(--color-void);
+  border: 1px solid var(--color-line);
+  padding: 1rem;
+  margin: 0 0 1.25rem;
+  overflow-x: auto;
+}
+.post-body pre code {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 0.78rem;
+  line-height: 1.65;
+  color: var(--color-phos-soft);
+}
+.post-body blockquote {
+  border-left: 2px solid var(--color-ice);
+  padding-left: 1rem;
+  margin: 0 0 1rem;
+  font-style: italic;
+  color: var(--color-fog);
+}
+.post-body a {
+  color: var(--color-ice);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.15s ease;
+}
+.post-body a:hover {
+  color: var(--color-phos);
+}
+.post-body hr {
+  border: 0;
+  border-top: 1px solid var(--color-line);
+  margin: 2rem 0;
+}
+
 /* ---------- reduced motion ---------- */
 
 @media (prefers-reduced-motion: reduce) {

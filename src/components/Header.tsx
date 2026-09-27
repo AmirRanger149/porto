@@ -5,8 +5,9 @@ const NAV = [
   { num: "01", label: "about", href: "#about" },
   { num: "02", label: "builds", href: "#builds" },
   { num: "03", label: "systems", href: "#systems" },
-  { num: "04", label: "tty", href: "#tty" },
-  { num: "05", label: "uplink", href: "#uplink" },
+  { num: "04", label: "logs", href: "#logs" },
+  { num: "05", label: "tty", href: "#tty" },
+  { num: "06", label: "uplink", href: "#uplink" },
 ];
 
 function fmtUptime(s: number): string {

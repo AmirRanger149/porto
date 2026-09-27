@@ -9,6 +9,8 @@ import { Projects } from "./components/Projects";
 import { Skills } from "./components/Skills";
 import { Terminal } from "./components/Terminal";
 import { Uplink } from "./components/Uplink";
+import { Logs } from "./components/Logs";
+import { PostReader } from "./components/PostReader";
 
 export default function App() {
   const [booted, setBooted] = useState(false);
@@ -27,9 +29,12 @@ export default function App() {
         <About />
         <Projects />
         <Skills />
+        <Logs />
         <Terminal />
         <Uplink />
       </main>
+
+      <PostReader />
 
       {/* CRT overlays */}
       <div className="crt-scan" aria-hidden="true" />
