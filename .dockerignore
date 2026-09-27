@@ -1,0 +1,23 @@
+# git metadata / CI
+.git/
+.github/
+
+# python bytecode & caches
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.mypy_cache/
+
+# local django artifacts — never bake into the image
+cms/test-db.sqlite3
+cms/db.sqlite3
+cms/staticfiles/
+
+# node / frontend build outputs (rebuilt inside the image)
+node_modules/
+dist/
+
+# local env
+.env
+.venv/

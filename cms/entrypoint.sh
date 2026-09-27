@@ -26,6 +26,23 @@ done
 echo "» migrating"
 python manage.py migrate --noinput
 
+echo "» verifying schema"
+python - <<'PY'
+import os
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
+import django
+django.setup()
+from django.db import connection
+tables = set(connection.introspection.table_names())
+missing = [t for t in ("posts_post",) if t not in tables]
+if missing:
+    print(f"✗ expected tables missing after migrate: {', '.join(missing)}", flush=True)
+    print("  hint: every app's migrations/ directory needs an __init__.py —", flush=True)
+    print("  without it Django silently skips that app's migrations.", flush=True)
+    raise SystemExit(1)
+print("  schema ok: posts_post present")
+PY
+
 echo "» seeding markdown content"
 python manage.py seed_posts
 

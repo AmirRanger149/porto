@@ -1,0 +1,21 @@
+# python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+.pytest_cache/
+.mypy_cache/
+
+# django
+cms/db.sqlite3
+cms/test-db.sqlite3
+cms/staticfiles/
+*.log
+
+# node / frontend
+node_modules/
+dist/
+
+# env / os
+.env
+.DS_Store
